@@ -3,6 +3,8 @@
 
 GenTXT est un outil simple avec une interface graphique (GUI) développé en Python (utilisant Tkinter) qui permet de scanner un répertoire, d'en générer une représentation textuelle de l'arborescence, et de concaténer le contenu des fichiers texte sélectionnés dans un unique fichier de sortie. Il offre une configuration flexible pour exclure certains fichiers, dossiers ou extensions.
 
+![Ccapture d'écran de GenTXT](img/img.png)
+
 ## Fonctionnalités
 
 *   **Interface Graphique Simple:** Facile à utiliser grâce à une interface construite avec Tkinter.
