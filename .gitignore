@@ -1,0 +1,16 @@
+# Fichiers à ignorer dans le dossier racine
+/.concat_config.json
+/GenTXT.spec
+/gentxt.txt
+/todo.md
+
+# Fichiers à ignorer dans le dossier "rapport"
+/rapport/texput.log
+/rapport/rapport.aux
+/rapport/rapport.log
+/rapport/rapport.out
+/rapport/rapport.toc
+
+# Dossiers à ignorer
+/build/
+/dist/
