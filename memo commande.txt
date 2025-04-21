@@ -1,0 +1,4 @@
+
+pyinstaller --onefile --noconsole --name GenTXT main.py
+
+Pour generer le .exe 

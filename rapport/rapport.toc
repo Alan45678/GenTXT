@@ -1,0 +1,23 @@
+\babel@toc {french}{}\relax 
+\contentsline {section}{Table des mati\`eres}{2}{section*.1}%
+\contentsline {section}{\numberline {1}Introduction}{3}{section.1}%
+\contentsline {section}{\numberline {2}Architecture Générale}{3}{section.2}%
+\contentsline {section}{\numberline {3}Fonctionnalités Principales}{4}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Génération de l'Arborescence du Répertoire}{4}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Concaténation Sélective du Contenu des Fichiers}{4}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Gestion de la Configuration via \texttt {.concat\_config.json}}{4}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Interface Utilisateur (GUI)}{4}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Conception Détaillée}{5}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Module Principal (\texttt {main.py})}{5}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Gestion de la Configuration}{5}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Logique de Traitement des Fichiers}{5}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Génération de l'Arborescence}{6}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Interface Utilisateur (Tkinter)}{6}{subsection.4.5}%
+\contentsline {section}{\numberline {5}Technologies Utilisées}{6}{section.5}%
+\contentsline {section}{\numberline {6}Déploiement}{7}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Utilisation de PyInstaller}{7}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Fichier de Spécification \texttt {GenTXT.spec}}{7}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Commande de Build}{8}{subsection.6.3}%
+\contentsline {section}{\numberline {7}Conclusion}{8}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Pistes d'Amélioration Possibles}{8}{subsection.7.1}%
+\contentsline {section}{\numberline {A}Annexe : Configuration par Défaut}{9}{appendix.A}%

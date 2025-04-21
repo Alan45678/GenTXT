@@ -1,0 +1,401 @@
+
+% ==================================================
+% Fichier principal : main.tex
+% Projet GenTXT - Rapport Technique
+% ==================================================
+
+\documentclass[11pt, a4paper]{article}
+
+% --- Packages ---
+\usepackage[utf8]{inputenc}       % Encodage des caractères d'entrée
+\usepackage[T1]{fontenc}          % Encodage de la police de sortie
+\usepackage[french]{babel}        % Support de la langue française (typographie, césure...)
+\usepackage{geometry}             % Gestion de la géométrie de la page
+\usepackage{graphicx}             % Inclusion d'images (non utilisé ici, mais bonne pratique)
+\usepackage{amsmath, amssymb}     % Symboles mathématiques (non utilisé ici, mais bonne pratique)
+\usepackage{xcolor}               % Gestion des couleurs (utilisé par listings)
+\usepackage{listings}             % Mise en forme du code source
+\usepackage{hyperref}             % Création de liens hypertextes (TOC, URLs, etc.)
+\usepackage{titling}              % Personnalisation du titre
+\usepackage{tocbibind}            % Ajoute la table des matières à elle-même
+\usepackage{pmboxdraw}
+
+% --- Configuration de la géométrie ---
+\geometry{a4paper, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm}
+
+% --- Configuration de listings (pour le code) ---
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92} % Couleur de fond légèrement crème
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize, % Utilisation de la police à chasse fixe (par ex. Fira Code si chargé)
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,                    % Position de la légende (en bas)
+    keepspaces=true,
+    numbers=left,                    % Numérotation des lignes à gauche
+    numbersep=5pt,                   % Espace entre numéro et ligne
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2,
+    language=Python % Langage par défaut
+}
+\lstset{style=mystyle} % Appliquer le style par défaut
+
+% Configuration spécifique pour JSON
+\lstdefinestyle{jsonstyle}{
+    backgroundcolor=\color{backcolour},
+    stringstyle=\color{codepurple}, % Clés et valeurs chaînes en violet
+    keywordstyle=\color{blue},      % Booléens (true, false) et null en bleu
+    commentstyle=\color{codegreen},
+    numberstyle=\tiny\color{codegray},
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showstringspaces=false,
+    tabsize=2,
+    literate=                    % Afficher les caractères JSON correctement
+     *{0}{{{\color{orange}0}}}{1}
+      {1}{{{\color{orange}1}}}{1}
+      {2}{{{\color{orange}2}}}{1}
+      {3}{{{\color{orange}3}}}{1}
+      {4}{{{\color{orange}4}}}{1}
+      {5}{{{\color{orange}5}}}{1}
+      {6}{{{\color{orange}6}}}{1}
+      {7}{{{\color{orange}7}}}{1}
+      {8}{{{\color{orange}8}}}{1}
+      {9}{{{\color{orange}9}}}{1}
+      {:}{{{\color{black}{:}}}}{1}
+      {,}{{{\color{black}{,}}}}{1}
+      {\{}{{{\color{black}{\{}}}}{1}
+      {\}}{{{\color{black}{\}}}}}{1}
+      {[}{{{\color{black}{[}}}}{1}
+      {]}{{{\color{black}{]}}}}{1},
+}
+
+
+% --- Configuration de hyperref ---
+\hypersetup{
+    colorlinks=true,              % Liens colorés plutôt qu'encadrés
+    linkcolor=blue,               % Couleur des liens internes (TOC, refs)
+    citecolor=green,              % Couleur des liens de citation (si utilisé)
+    urlcolor=magenta,             % Couleur des URLs
+    pdftitle={Rapport Technique : Projet GenTXT},
+    pdfauthor={Ingénieur Logiciel Expérimenté},
+    pdfsubject={Analyse technique de l'outil GenTXT},
+    pdfkeywords={Python, Tkinter, JSON, Configuration, File Processing, GenTXT},
+    bookmarksopen=true,           % Ouvrir les signets par défaut
+    bookmarksnumbered=true        % Numéroter les signets
+}
+
+% --- Informations du document ---
+\title{
+    \vspace{-1cm} % Remonter un peu le titre
+    \textbf{Rapport Technique Détaillé} \\
+    \large Projet GenTXT : Générateur de Synthèse de Contenu de Projet
+    \vspace{0.5cm} % Espace après le titre
+}
+\author{Rédigé par : \textit{Un Ingénieur Logiciel Expérimenté} \\
+        À destination d'un étudiant en informatique}
+\date{\today}
+
+% ==================================================
+% Début du document
+% ==================================================
+\begin{document}
+
+\maketitle % Affiche le titre, l'auteur et la date
+
+\newpage % Page après le titre
+
+\tableofcontents % Génère la table des matières
+
+\newpage % Page après la table des matières
+
+% ==================================================
+\section{Introduction}
+% ==================================================
+
+Ce document constitue un rapport technique détaillé du projet \texttt{GenTXT}. L'objectif de cet outil est de générer un fichier texte unique (\texttt{.txt}) synthétisant la structure et le contenu pertinent d'un répertoire de projet logiciel. Cette synthèse inclut une représentation de l'arborescence des fichiers et dossiers, ainsi que le contenu des fichiers texte sélectionnés, en excluant certains éléments selon une configuration personnalisable.
+
+Le présent rapport s'adresse à un étudiant en informatique possédant des bases solides en programmation et en concepts informatiques généraux. Il vise à présenter de manière approfondie l'architecture logicielle, les choix de conception, les technologies employées et les mécanismes internes de \texttt{GenTXT}. La rigueur technique est de mise, tout en conservant une clarté suffisante pour faciliter la compréhension des aspects clés du projet.
+
+Nous aborderons successivement :
+\begin{itemize}
+    \item L'architecture générale et les flux de données.
+    \item Les fonctionnalités principales offertes par l'outil.
+    \item La conception détaillée des composants logiciels.
+    \item Les technologies et bibliothèques utilisées.
+    \item Les aspects liés au déploiement de l'application.
+\end{itemize}
+
+% ==================================================
+\section{Architecture Générale}
+% ==================================================
+
+L'application \texttt{GenTXT} est structurée autour d'une architecture simple mais efficace, séparant l'interface utilisateur de la logique métier principale. Elle peut être décomposée en plusieurs couches logiques :
+
+\begin{enumerate}
+    \item \textbf{Couche Interface Utilisateur (UI) :} Réalisée avec la bibliothèque standard Python \texttt{Tkinter}, cette couche fournit une interface graphique (GUI) permettant à l'utilisateur de :
+        \begin{itemize}
+            \item Sélectionner le répertoire source à analyser.
+            \item Choisir l'emplacement et le nom du fichier de sortie généré.
+            \item Accéder à l'édition de la configuration d'exclusion pour le répertoire courant.
+            \item Lancer le processus de génération.
+            \item Quitter l'application.
+        \end{itemize}
+    \item \textbf{Couche Logique Métier (Core Logic) :} Contient l'ensemble des fonctions responsables du traitement principal :
+        \begin{itemize}
+            \item Parcours récursif du répertoire source (\texttt{os.walk}).
+            \item Filtrage des fichiers et dossiers basé sur les règles d'exclusion.
+            \item Lecture sécurisée du contenu des fichiers texte (gestion des encodages, détection basique des binaires).
+            \item Génération de la représentation textuelle de l'arborescence.
+            \item Assemblage du fichier de sortie final.
+        \end{itemize}
+    \item \textbf{Couche de Gestion de la Configuration :} Responsable de la lecture et de l'écriture des paramètres d'exclusion dans un fichier \texttt{.concat\_config.json}. Elle fournit une configuration par défaut si ce fichier est absent ou invalide.
+    \item \textbf{Couche d'Interaction avec le Système de Fichiers :} Utilise les modules \texttt{os} et \texttt{pathlib} pour interagir avec le système de fichiers (lister les répertoires, vérifier l'existence de fichiers, lire/écrire des fichiers, manipuler les chemins).
+\end{enumerate}
+
+Le flux d'exécution typique est initié par l'utilisateur via l'interface graphique. Lorsqu'il déclenche la génération, l'UI appelle la fonction principale de la logique métier, en lui passant le chemin du répertoire source et le chemin du fichier de sortie. La logique métier charge alors la configuration, parcourt le système de fichiers en appliquant les filtres, lit le contenu pertinent, génère l'arborescence et écrit le résultat dans le fichier de sortie spécifié. Des messages d'information ou d'erreur sont renvoyés à l'UI pour affichage à l'utilisateur.
+
+% ==================================================
+\section{Fonctionnalités Principales}
+% ==================================================
+
+\subsection{Génération de l'Arborescence du Répertoire}
+L'outil produit une représentation textuelle de la structure des dossiers et fichiers présents dans le répertoire source, similaire à la sortie de la commande \texttt{tree} sous Linux/Unix. Cette fonctionnalité est implémentée par la fonction \texttt{write\_directory\_tree}. Elle parcourt récursivement le répertoire et utilise des préfixes (comme \texttt{├──}, \texttt{└──}, \texttt{│   }) pour visualiser la hiérarchie. Les éléments (fichiers, dossiers) spécifiés dans les règles d'exclusion de type "tree" (\texttt{exclude\_tree\_files}, \texttt{exclude\_tree\_extensions}, \texttt{exclude\_tree\_dirs}) sont omis de cette représentation. Le fichier de configuration \texttt{.concat\_config.json} lui-même est systématiquement exclu de l'arborescence affichée.
+
+\subsection{Concaténation Sélective du Contenu des Fichiers}
+Le cœur de l'outil réside dans sa capacité à agréger le contenu des fichiers texte pertinents. La fonction \texttt{get\_all\_files} identifie les fichiers à inclure en se basant sur les règles d'exclusion de type "content" (\texttt{exclude\_content\_files}, \texttt{exclude\_content\_extensions}, \texttt{exclude\_content\_dirs}). Notamment, si un fichier se trouve dans un répertoire marqué pour exclusion de contenu, il est ignoré.
+
+La fonction \texttt{read\_file\_content} est ensuite utilisée pour lire le contenu de chaque fichier sélectionné. Elle implémente une heuristique simple pour détecter les fichiers potentiellement binaires (recherche du caractère nul \texttt{\\x00}) et les ignore, ajoutant une note à cet effet dans le fichier de sortie. Pour les fichiers texte, elle tente une lecture avec l'encodage UTF-8. En cas d'échec (par exemple, pour des fichiers encodés en Latin-1), une erreur est signalée dans le fichier final, évitant ainsi l'arrêt brutal du processus.
+
+Le contenu de chaque fichier inclus est précédé d'un en-tête indiquant son chemin relatif par rapport au répertoire source (par exemple, \texttt{--- Fichier : src/utils/helpers.py ---}).
+
+\subsection{Gestion de la Configuration via \texttt{.concat\_config.json}}
+La flexibilité de \texttt{GenTXT} repose sur un fichier de configuration au format JSON, nommé \texttt{.concat\_config.json}, situé à la racine du répertoire analysé. Ce fichier permet de définir finement quels éléments exclure :
+\begin{itemize}
+    \item \texttt{exclude\_tree\_files}, \texttt{exclude\_tree\_extensions}, \texttt{exclude\_tree\_dirs} : Noms de fichiers, extensions et noms de dossiers à ne pas montrer dans l'arborescence.
+    \item \texttt{exclude\_content\_files}, \texttt{exclude\_content\_extensions}, \texttt{exclude\_content\_dirs} : Noms de fichiers, extensions et noms de dossiers dont le contenu ne doit pas être inclus (et les dossiers spécifiés ne seront pas parcourus pour leur contenu).
+\end{itemize}
+Les fonctions \texttt{load\_config} et \texttt{save\_config} gèrent la lecture et l'écriture de ce fichier, en assurant la conversion entre les listes JSON et les ensembles (sets) Python pour des vérifications d'appartenance efficaces en $O(1)$ en moyenne. Si le fichier n'existe pas ou est mal formé, une configuration par défaut est utilisée (voir Annexe \ref{annexe:config}).
+
+\subsection{Interface Utilisateur (GUI)}
+L'interface graphique, développée avec \texttt{Tkinter}, offre une expérience utilisateur simple et directe. Elle comprend :
+\begin{itemize}
+    \item Une fenêtre principale avec des boutons pour lancer le processus, éditer la configuration et quitter.
+    \item Des dialogues natifs du système d'exploitation pour la sélection de dossiers (\texttt{filedialog.askdirectory}) et de fichiers (\texttt{filedialog.asksaveasfilename}).
+    \item Une fenêtre modale dédiée (\texttt{Toplevel}) pour l'édition du fichier \texttt{.concat\_config.json}. Cette fenêtre affiche le contenu JSON dans un widget \texttt{Text} et permet à l'utilisateur de le modifier directement. La validation du format JSON est effectuée avant la sauvegarde.
+    \item Des boîtes de dialogue informatives (\texttt{messagebox}) pour notifier l'utilisateur des succès ou des erreurs.
+\end{itemize}
+
+% ==================================================
+\section{Conception Détaillée}
+% ==================================================
+
+Cette section détaille l'implémentation de certains composants clés de \texttt{main.py}.
+
+\subsection{Module Principal (\texttt{main.py})}
+Ce fichier unique contient l'ensemble du code source : définitions des constantes (configurations par défaut), fonctions logiques, fonctions d'interface utilisateur et point d'entrée principal (\texttt{if \_\_name\_\_ == "\_\_main\_\_":}). Cette approche monolithique est acceptable pour un projet de cette taille, mais pour une application plus complexe, une décomposition en plusieurs modules/fichiers serait préférable.
+
+\subsection{Gestion de la Configuration}
+\begin{itemize}
+    \item \textbf{\texttt{create\_default\_config()}:} Retourne un dictionnaire Python contenant les listes d'exclusions par défaut.
+    \item \textbf{\texttt{load\_config(directory)}:} Recherche \texttt{.concat\_config.json} dans le répertoire spécifié. Si trouvé, tente de le parser en JSON. Valide que les valeurs sont des listes (sinon utilise la valeur par défaut pour cette clé). Fusionne les valeurs chargées avec les valeurs par défaut (les valeurs chargées priment si valides). Convertit toutes les listes d'exclusion en `set` pour optimiser les recherches ultérieures. Gère les erreurs de parsing JSON ou autres exceptions de lecture.
+    \item \textbf{\texttt{save\_config(directory, config\_data)}:} Prend un dictionnaire de configuration (avec des `set` comme valeurs), convertit les `set` en listes triées (pour la lisibilité et la reproductibilité du fichier JSON), puis écrit le dictionnaire au format JSON indenté dans \texttt{.concat\_config.json}. Gère les erreurs d'écriture.
+    \item \textbf{\texttt{edit\_config\_ui(directory)}:} Orchestre l'affichage et la modification de la configuration. Charge la configuration existante ou propose d'en créer une par défaut. Utilise un widget \texttt{Text} pour l'édition. Lors de la sauvegarde, re-parse le contenu du widget \texttt{Text}, valide la structure JSON et le type des valeurs (listes attendues), convertit en `set` pour l'appel à \texttt{save\_config}. Utilise \texttt{Toplevel}, \texttt{grab\_set} et \texttt{wait\_window} pour créer une expérience modale.
+\end{itemize}
+
+\subsection{Logique de Traitement des Fichiers}
+\begin{itemize}
+    \item \textbf{\texttt{is\_excluded(name, path, config, exclude\_type)}:} Fonction centrale pour vérifier si un élément (fichier ou dossier) doit être exclu. Elle prend le nom de l'élément, son chemin complet, la configuration chargée, et le type d'exclusion ('tree' ou 'content'). Elle vérifie le nom de base, l'extension (insensible à la casse), et pour le type 'content', si l'élément se trouve dans un chemin contenant un dossier exclu.
+    \item \textbf{\texttt{get\_all\_files(directory, config)}:} Utilise \texttt{os.walk} pour parcourir le répertoire. Crucialement, elle modifie la liste \texttt{dirs} \textit{in-place} (`dirs[:] = ...`) pour élaguer l'exploration des répertoires marqués comme exclus pour le contenu (\texttt{exclude\_content\_dirs}). Pour chaque fichier rencontré, elle appelle \texttt{is\_excluded} avec le type 'content' pour décider de l'inclure ou non. Retourne un générateur produisant les chemins complets des fichiers à inclure.
+    \item \textbf{\texttt{read\_file\_content(file\_path)}:} Tente d'abord une lecture binaire pour détecter la présence de \texttt{\\x00} (heuristique simple de détection de binaire). Si détecté, retourne un message d'avertissement. Sinon, tente une lecture en mode texte avec encodage UTF-8. Capture les \texttt{UnicodeDecodeError} pour signaler les problèmes d'encodage sans interrompre le processus global. Capture également d'autres \texttt{Exception} potentielles liées à la lecture.
+\end{itemize}
+
+\subsection{Génération de l'Arborescence}
+\begin{itemize}
+    \item \textbf{\texttt{write\_directory\_tree(directory, output\_file, config)}:} Fonction récursive interne \texttt{walk\_dir(current\_path, prefix)} qui effectue le travail principal.
+        \begin{enumerate}
+            \item Liste les entrées du \texttt{current\_path}.
+            \item Filtre les entrées en utilisant les règles d'exclusion 'tree' (\texttt{exclude\_tree\_*}) et exclut \texttt{CONFIG\_FILENAME}.
+            \item Trie les entrées restantes pour un affichage ordonné.
+            \item Itère sur les entrées triées, détermine le connecteur approprié (\texttt{├──} ou \texttt{└──}).
+            \item Écrit la ligne formatée dans \texttt{output\_file}.
+            \item Si l'entrée est un répertoire non exclu, appelle récursivement \texttt{walk\_dir} avec le nouveau chemin et un préfixe mis à jour (\texttt{prefix + "    "} ou \texttt{prefix + "│   "}).
+        \end{enumerate}
+\end{itemize}
+
+\subsection{Interface Utilisateur (Tkinter)}
+\begin{itemize}
+    \item \textbf{\texttt{create\_ui()}:} Initialise la fenêtre principale \texttt{Tk}, configure son titre et sa taille. Crée un \texttt{Frame} pour organiser les boutons. Ajoute les boutons ("Démarrer", "Configuration", "Quitter") et leur associe les fonctions callback correspondantes (\texttt{start\_process}, \texttt{create\_or\_edit\_config}, \texttt{root.quit}). Lance la boucle d'événements Tkinter (\texttt{root.mainloop()}).
+    \item \textbf{\texttt{start\_process()}:} Appelle \texttt{select\_directory} et \texttt{select\_output\_file} pour obtenir les chemins nécessaires. Si les deux sont fournis, appelle \texttt{concat\_files} dans un bloc \texttt{try...except} pour exécuter la logique métier et afficher un message de succès ou d'erreur via \texttt{messagebox}.
+    \item \textbf{\texttt{create\_or\_edit\_config()}:} Demande d'abord à l'utilisateur de sélectionner un répertoire via \texttt{select\_directory}. Si un répertoire est choisi, appelle \texttt{edit\_config\_ui} pour ce répertoire.
+\end{itemize}
+
+% ==================================================
+\section{Technologies Utilisées}
+% ==================================================
+
+Le projet \texttt{GenTXT} repose exclusivement sur Python et ses bibliothèques standard, ce qui garantit une bonne portabilité et une installation aisée des dépendances (aucune dépendance externe n'est requise pour l'exécution du script \texttt{main.py}).
+
+\begin{itemize}
+    \item \textbf{Langage :} Python 3.x. Le code utilise des fonctionnalités modernes de Python (f-strings, gestionnaires de contexte `with`, `pathlib`, type hints implicites par la nature du code mais non formellement déclarés).
+    \item \textbf{Bibliothèque Standard - \texttt{os} :} Fournit des fonctions pour interagir avec le système d'exploitation, notamment pour le parcours de répertoires (\texttt{os.walk}), la manipulation de chemins (\texttt{os.path.join}, \texttt{os.path.basename}, \texttt{os.path.splitext}, \texttt{os.path.isdir}), et l'accès aux variables d'environnement (non utilisé ici).
+    \item \textbf{Bibliothèque Standard - \texttt{json} :} Utilisée pour la sérialisation (écriture) et la désérialisation (lecture) du fichier de configuration \texttt{.concat\_config.json}. Permet de manipuler facilement la structure de données de configuration.
+    \item \textbf{Bibliothèque Standard - \texttt{pathlib} :} Offre une approche orientée objet pour la manipulation des chemins de fichiers. Utilisée ici notamment pour décomposer un chemin en ses composants (`Path(path).parts`) afin de vérifier l'appartenance à un répertoire exclu.
+    \item \textbf{Bibliothèque Standard - \texttt{tkinter} :} Bibliothèque native de Python pour la création d'interfaces graphiques (GUI). Utilisée ici pour construire l'intégralité de l'interface utilisateur, y compris la fenêtre principale, les dialogues de sélection de fichiers/dossiers, les messages d'alerte, et la fenêtre d'édition de configuration. Ses sous-modules \texttt{tkinter.filedialog}, \texttt{tkinter.messagebox}, et \texttt{tkinter.simpledialog} sont mis à contribution.
+    \item \textbf{Outil Externe - \texttt{PyInstaller} (pour le déploiement) :} Bien que non requis pour exécuter le script, PyInstaller est utilisé pour packager l'application Python et ses dépendances (même si seulement des bibliothèques standard ici) en un exécutable autonome (fichier \texttt{.exe} sous Windows, ou exécutable natif sous macOS/Linux). Cela simplifie la distribution et l'utilisation de l'outil par des utilisateurs n'ayant pas nécessairement Python installé ou configuré. Le fichier \texttt{GenTXT.spec} est le fichier de configuration utilisé par PyInstaller pour le processus de build.
+\end{itemize}
+
+% ==================================================
+\section{Déploiement}
+% ==================================================
+
+L'objectif du déploiement pour ce type d'outil est de le rendre facilement utilisable sans nécessiter une installation manuelle de Python ou des dépendances par l'utilisateur final.
+
+\subsection{Utilisation de PyInstaller}
+PyInstaller (\url{https://pyinstaller.org/}) est l'outil choisi pour créer un exécutable autonome à partir du script \texttt{main.py}. PyInstaller analyse le code source, détecte les imports, et regroupe le script, l'interpréteur Python et les bibliothèques nécessaires dans un seul répertoire ou, comme choisi ici, dans un unique fichier exécutable.
+
+\subsection{Fichier de Spécification \texttt{GenTXT.spec}}
+Le fichier \texttt{GenTXT.spec} est généré par PyInstaller (souvent lors d'une première exécution avec des options de base) et peut être ensuite édité pour affiner le processus de build.
+Les options clés utilisées dans ce fichier sont :
+\begin{itemize}
+    \item \texttt{Analysis(['main.py'], ...)} : Indique le script principal de l'application.
+    \item \texttt{datas=[]} : Permettrait d'inclure des fichiers de données supplémentaires (non nécessaire ici).
+    \item \texttt{hiddenimports=[]} : Permettrait de spécifier des modules que PyInstaller n'aurait pas détectés automatiquement (non nécessaire ici).
+    \item \texttt{console=False} : Spécifie la création d'une application "windowed" (sans console noire en arrière-plan sous Windows), ce qui est approprié pour une application GUI. Corresponds à l'option \texttt{--noconsole} ou \texttt{--windowed} en ligne de commande.
+    \item \texttt{name='GenTXT'} : Définit le nom de l'exécutable final.
+    \item \texttt{onefile=True} (implicite via \texttt{EXE} dans un .spec généré par \texttt{--onefile}) : Indique à PyInstaller de créer un seul fichier exécutable contenant tout le nécessaire. Corresponds à l'option \texttt{--onefile} en ligne de commande.
+\end{itemize}
+Le fichier \texttt{.spec} fourni dans le contexte initial semble correspondre à une configuration standard pour une application GUI simple en un seul fichier.
+
+\subsection{Commande de Build}
+Le fichier \texttt{memo commande.txt} rappelle la commande typique pour générer l'exécutable en utilisant les options souhaitées directement en ligne de commande (ce qui génère aussi un fichier \texttt{.spec} si absent) :
+\begin{lstlisting}[language=bash, caption={Commande de build PyInstaller}, label={lst:pyinstaller_cmd}]
+pyinstaller --onefile --noconsole --name GenTXT main.py
+\end{lstlisting}
+\begin{itemize}
+    \item \texttt{--onefile} : Crée un seul exécutable.
+    \item \texttt{--noconsole} (ou \texttt{--windowed}) : Crée une application sans console (pour GUI).
+    \item \texttt{--name GenTXT} : Définit le nom de l'exécutable.
+    \item \texttt{main.py} : Le script d'entrée.
+\end{itemize}
+L'exécution de cette commande (ou de \texttt{pyinstaller GenTXT.spec}) dans le répertoire du projet génère les sous-dossiers \texttt{build} et \texttt{dist}. L'exécutable final se trouve dans le dossier \texttt{dist}.
+
+% ==================================================
+\section{Conclusion}
+% ==================================================
+
+Le projet \texttt{GenTXT} constitue un utilitaire pratique pour générer rapidement une vue d'ensemble textuelle d'un projet logiciel. Son architecture, bien que simple, sépare logiquement l'interface utilisateur (Tkinter), la logique métier (parcours, filtrage, lecture de fichiers) et la gestion de la configuration (JSON). L'utilisation exclusive des bibliothèques standard Python assure une bonne portabilité du code source.
+
+La conception met l'accent sur la flexibilité grâce au fichier de configuration \texttt{.concat\_config.json}, permettant à l'utilisateur d'adapter précisément le périmètre de l'analyse à ses besoins. Des mécanismes robustes, bien que simples, sont en place pour gérer les erreurs potentielles (parsing JSON, lecture de fichiers, encodages, détection basique de binaires).
+
+Le déploiement via PyInstaller permet de packager l'application en un exécutable autonome, facilitant sa distribution et son utilisation par des personnes n'ayant pas l'environnement de développement Python configuré.
+
+\subsection{Pistes d'Amélioration Possibles}
+Bien que fonctionnel, l'outil pourrait être amélioré sur plusieurs aspects :
+\begin{itemize}
+    \item \textbf{Détection de Binaires Plus Robuste :} L'heuristique actuelle (recherche de \texttt{\\x00}) est simple. Une approche basée sur les types MIME ou des bibliothèques d'analyse de contenu pourrait être plus fiable.
+    \item \textbf{Gestion d'Encodages Multiples :} Tenter plusieurs encodages courants (e.g., Latin-1, CP1252) en cas d'échec de l'UTF-8.
+    \item \textbf{Interface en Ligne de Commande (CLI) :} Ajouter une interface en ligne de commande (par exemple avec \texttt{argparse}) pour une utilisation dans des scripts ou pour les utilisateurs préférant le terminal.
+    \item \textbf{Traitement Asynchrone :} Pour de très gros répertoires, le traitement pourrait être long. L'utilisation d'\texttt{asyncio} pourrait améliorer la réactivité de l'UI pendant le scan (bien que l'I/O disque soit souvent le facteur limitant).
+    \item \textbf{Tests Unitaires :} Ajouter une suite de tests unitaires (avec \texttt{unittest} ou \texttt{pytest}) pour garantir la non-régression et la fiabilité des fonctions logiques.
+    \item \textbf{Internationalisation (i18n) :} Permettre la traduction de l'interface utilisateur dans d'autres langues.
+\end{itemize}
+
+En conclusion, \texttt{GenTXT} est un projet bien délimité qui remplit sa fonction principale de manière efficace, tout en offrant une base solide pour d'éventuelles extensions futures.
+
+% ==================================================
+\appendix
+\section{Annexe : Configuration par Défaut}
+\label{annexe:config}
+% ==================================================
+
+Si aucun fichier \texttt{.concat\_config.json} n'est trouvé à la racine du répertoire analysé, ou si celui-ci est invalide, l'outil \texttt{GenTXT} utilise la configuration par défaut suivante. Notez que les valeurs sont stockées en interne sous forme de `set` Python pour l'efficacité, mais sont représentées ici et dans le fichier JSON sous forme de listes.
+
+\begin{lstlisting}[style=jsonstyle, % REMOVED language=json
+	caption={Structure et valeurs par défaut de .concat\_config.json},
+	label={lst:default_config}]
+{
+    "exclude_tree_files": [],
+    "exclude_tree_extensions": [
+        ".json",
+        ".pb",
+        ".pyc"
+    ],
+    "exclude_tree_dirs": [
+        ".git",
+        "__pycache__",
+        "node_modules"
+    ],
+    "exclude_content_files": [],
+    "exclude_content_extensions": [
+        ".7z",
+        ".a",
+        ".avi",
+        ".bmp",
+        ".class",
+        ".csv",
+        ".dll",
+        ".ear",
+        ".exe",
+        ".gif",
+        ".gz",
+        ".ico",
+        ".jar",
+        ".jpeg",
+        ".jpg",
+        ".lib",
+        ".log",
+        ".mkv",
+        ".mov",
+        ".mp3",
+        ".mp4",
+        ".o",
+        ".ods",
+        ".odt",
+        ".ogg",
+        ".pb",
+        ".pdf",
+        ".png",
+        ".pyc",
+        ".rar",
+        ".so",
+        ".svg",
+        ".tar",
+        ".tiff",
+        ".war",
+        ".wav",
+        ".xls",
+        ".xlsx",
+        ".zip",
+        ".json",
+        ".md"
+    ],
+    "exclude_content_dirs": [
+        ".git",
+        "__pycache__",
+        "node_modules"
+    ]
+}
+\end{lstlisting}
+
+
+% ==================================================
+% Fin du document
+% ==================================================
+\end{document}
+
+
